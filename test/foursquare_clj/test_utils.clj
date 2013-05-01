@@ -12,6 +12,10 @@
     (.load props file-reader)
     (into {} props)))
 
-(def ^:dynamic *config* (load-config-file "test.config"))
+(def ^:dynamic *config* (try
+                          (load-config-file "test.config")
+                          (catch Exception e
+                            nil)))
 
-(def ^:dynamic *access-token* (get *config* "user.access.token"))
+(def ^:dynamic *access-token* (or (System/getenv "USER_ACCESS_TOKEN")
+                                  (get *config* "user.access.token")))
