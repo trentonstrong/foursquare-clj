@@ -44,7 +44,9 @@
                                    :as :json
                                    :coerce :always}
                                   query-params#)]
-         (http/request request-map#)))))
+         (if-not (:multi args#)
+           (http/request request-map#)
+           request-map#)))))
 
 
                                                             
