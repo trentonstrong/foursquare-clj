@@ -10,6 +10,7 @@
 (def-foursquare-endpoint :get "v2" "users/{:user-id}/badges" :user-id "self")
 (def-foursquare-endpoint :get "v2" "users/{:user-id}/checkins" :user-id "self")
 (def-foursquare-endpoint :get "v2" "users/{:user-id}/friends" :user-id "self")
+(def-foursquare-endpoint :get "v2" "users/{:user-id}/following" :user-id "self")
 (def-foursquare-endpoint :get "v2" "users/{:user-id}/lists" :user-id "self")
 (def-foursquare-endpoint :get "v2" "users/{:user-id}/mayorships" :user-id "self")
 (def-foursquare-endpoint :get "v2" "users/{:user-id}/photos" :user-id "self")
