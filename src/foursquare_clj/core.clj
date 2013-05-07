@@ -1,5 +1,6 @@
 (ns foursquare-clj.core
-  (:require [clj-http.client :as http]))
+  (:require [org.httpkit.client :as http]
+            [cheshire.core :as json]))
 
 (def FOURSQUARE-ROOT-URL "https://api.foursquare.com")
 (def LAST-VERIFIED-DATE "20130430")
@@ -20,11 +21,15 @@
   (let [path-replaced (replace-uri-params path arg-map)]
     (clojure.string/join "/" [root version path-replaced])))
 
+(defn coerce-json-body
+  [resp]
+  (assoc resp :body (json/parse-string (:body resp) true)))
+
 (defmacro def-foursquare-endpoint
   [default-method version resource-path & rest]
   (let [rest-arg-map (apply sorted-map rest)
         param-free-name (clojure.string/replace resource-path #"/\{:([a-zA-Z\-]+)\}" "")
-        dashed-name (clojure.string/replace param-free-name #"[^a-zA-Z]+" "-") ; convert group of symbols to a dash 
+        dashed-name (clojure.string/replace param-free-name #"[^a-zA-Z]+" "-") ; convert group of symbols to a dash
         clean-name (clojure.string/replace dashed-name #"-$" "")
         fn-name (symbol clean-name)]
     `(defn ~fn-name
@@ -41,14 +46,16 @@
              request-map# (merge args#
                                   {:url uri#
                                    :method method#
-                                   :as :json
+                                   :as :text
                                    :coerce :always}
-                                  query-params#)]
+                                  query-params#)
+             callback# (comp (get args# :callback identity
+                             coerce-json-body)]
          (if-not (:multi args#)
-           (http/request request-map#)
+           (http/request request-map# callback#)
            request-map#)))))
 
 
-                                                            
+
 
 
