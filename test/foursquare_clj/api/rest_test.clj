@@ -7,9 +7,9 @@
   [f & args]
   (let [args (concat args [:access-token *access-token*])
         result (apply f args)]
-    (is (= 200 (:status @result)))))
-
-
+    (is (= 200 (:status result)))))
+    
+  
 
 (deftest test-users
   (is-http-200 users-leaderboard)
@@ -55,7 +55,7 @@
   (is-http-200 checkins-recent))
 
 (deftest test-checkins-aspects
-  (let [checkin-id (get-in @(checkins-recent :access-token *access-token*)
+  (let [checkin-id (get-in (checkins-recent :access-token *access-token*)
                            [:body :response :recent 0 :id])]
     (is-http-200 checkins :checkin-id checkin-id)
     (is-http-200 checkins-likes :checkin-id checkin-id)))
