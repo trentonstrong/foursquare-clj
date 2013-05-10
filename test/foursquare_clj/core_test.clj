@@ -11,7 +11,8 @@
     (is (= "users/checkins/4" case3))))
 
 (deftest test-make-uri
-  (let [case1 (make-uri FOURSQUARE-ROOT-URL "v2" "user/checkins" {})
-        case2 (make-uri FOURSQUARE-ROOT-URL "v2" "user/checkins/{:id}" {:id 4})]
+  (let [case1 (make-uri FOURSQUARE-ROOT-URL "user/checkins" {})
+        case2 (make-uri FOURSQUARE-ROOT-URL "user/checkins/{:id}" {:id 4})]
     (is (= "https://api.foursquare.com/v2/user/checkins" case1))
     (is (= "https://api.foursquare.com/v2/user/checkins/4" case2))))
+  

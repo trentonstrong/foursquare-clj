@@ -1,5 +1,6 @@
 (ns foursquare-clj.api.rest-test
   (:use [clojure test]
+        [foursquare-clj.core :only [with-multi]]
         [foursquare-clj.api.rest]
         [foursquare-clj.test-utils]))
 
@@ -60,3 +61,9 @@
     (is-http-200 checkins :checkin-id checkin-id)
     (is-http-200 checkins-likes :checkin-id checkin-id)))
 
+(deftest test-with-multi
+  (let [response (with-multi *access-token*
+                   (users)
+                   (users-friends))]
+    (is (= 200 (:status response)))
+    (is (= 2 (count (get-in response [:body :response :responses]))))))
